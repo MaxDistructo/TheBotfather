@@ -21,6 +21,8 @@ object BaseBot : IDiscordBot {
     override lateinit var logger: Logger
     override var registry: LinkedList<Pair<ICommandRegistry, IBaseListener>> = LinkedList()
     lateinit var listener : IBaseListener
+    var activeTrivia : MutableList<Int> = mutableListOf()
+    var nextTrivia = 0
 
     @JvmStatic
     fun main(args : Array<String>){
