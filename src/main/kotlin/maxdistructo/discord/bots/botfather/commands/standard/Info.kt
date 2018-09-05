@@ -19,7 +19,7 @@ class Info : BaseCommand() {
         get() = false
 
     override fun init(message: Message, args: List<String>): String {
-        return onInfoCommand(PrivUtils.listToArray(args), message, Utils.getMentionedUser(message))
+        return onInfoCommand(PrivUtils.listToArray(args), message, Utils.getUserFromInput(message, message.contentDisplay[1]))
     }
 
     fun onInfoCommand(args: Array<String>, message: Message, mentioned: Member?): String {
@@ -63,6 +63,6 @@ class Info : BaseCommand() {
             return "\nMember " + mentioned.user.name + " is also known as " + nickChecked + "\nThey have the roles " + roleNamesChecked + "\nIn Discord Server: " + guildName
 
         }
-        return "Command has errored. Please enter a valid command."
+        return onInfoCommand(args, message, null) //If not mod, loops into self for returning details about the user who send the command.
     }
 }

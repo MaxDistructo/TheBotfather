@@ -1,23 +1,41 @@
 package maxdistructo.discord.bots.botfather.commands
 
+import com.jagrosh.jdautilities.command.Command
+import com.jagrosh.jdautilities.command.CommandEvent
 import maxdistructo.discord.bots.botfather.background.EnumSelector
 import maxdistructo.discord.bots.botfather.background.PrivUtils
 import maxdistructo.discord.bots.botfather.commands.mafia.MafiaCommand
+import maxdistructo.discord.bots.botfather.commands.mafia.MafiaListener
 import maxdistructo.discord.bots.botfather.commands.mafia.action.ActionMessage
 import maxdistructo.discord.bots.botfather.commands.mafia.methods.*
 import maxdistructo.discord.bots.botfather.commands.mafia.obj.Game
 import maxdistructo.discord.bots.botfather.commands.mafia.obj.Player
 import maxdistructo.discord.bots.botfather.commands.mafia.obj.Roles
 import maxdistructo.discord.core.jda.Utils
-import maxdistructo.discord.core.jda.command.IBaseListener
-import maxdistructo.discord.core.jda.command.ICommandType
 import maxdistructo.discord.core.jda.message.Messages
 import maxdistructo.discord.core.jda.message.Webhook
-import maxdistructo.discord.core.jda.obj.ICommandRegistry
 import net.dv8tion.jda.core.entities.Message
 
 
-object MafiaCommands : ICommandRegistry {
+object MafiaCommands {
+    class MafiaBaseCommand : Command(){
+        override fun getName(): String {
+            return "mafia"
+        }
+
+        override fun getHelp(): String {
+            return "mafia - Mafia Game System"
+        }
+        override fun getChildren(): Array<Command> {
+            return arrayOf(Do(), Join(), Continue(), Start(), Info(), ModInfo(), RoleCard(), SetRole(), KillCommand(), JailPlayer(), Vote(), AdminMessage(), Action(), Generate(), Leave(), Fixer())
+        }
+        override fun execute(event: CommandEvent?) {
+            MafiaListener.mafiaCommandEvent(event!!) //Simple Pass-through Function
+        }
+        init{
+            MafiaListener.registerCommands(Do(), Join(), Continue(), Start(), Info(), ModInfo(), RoleCard(), SetRole(), KillCommand(), JailPlayer(), Vote(), AdminMessage(), Action(), Generate(), Leave(), Fixer())
+        }
+    }
 
     class Do : MafiaCommand(){
         override val commandName: String
@@ -238,25 +256,5 @@ object MafiaCommands : ICommandRegistry {
         }
     }
 
-    override fun registerCommands(listener : IBaseListener){
-        val userDo = Do()
-        val join = Join()
-        val gameContinue = Continue()
-        val start = Start()
-        val info = Info()
-        val modInfo = ModInfo()
-        val roleCard = RoleCard()
-        val setRole = SetRole()
-        val killCommand = KillCommand()
-        val jailPlayer = JailPlayer()
-        val vote = Vote()
-        val message = AdminMessage()
-        val action = Action()
-        val generate = Generate()
-        val reset = Resetter.Command()
-        val leave = Leave()
-        val fixer = Fixer()
-        listener.registerCommand(userDo, join, info, modInfo, roleCard, setRole, killCommand, jailPlayer, vote, message, action, generate, reset, leave, gameContinue, start, fixer)
-    }
 
 }

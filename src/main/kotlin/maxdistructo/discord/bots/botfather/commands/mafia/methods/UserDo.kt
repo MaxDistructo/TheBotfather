@@ -1,6 +1,6 @@
 package maxdistructo.discord.bots.botfather.commands.mafia.methods
 
-import maxdistructo.discord.bots.botfather.commands.mafia.MafiaListener
+//import maxdistructo.discord.bots.botfather.commands.mafia.MafiaListener
 import maxdistructo.discord.bots.botfather.commands.mafia.obj.Details
 import maxdistructo.discord.bots.botfather.commands.mafia.obj.Game
 import maxdistructo.discord.bots.botfather.commands.mafia.obj.Player
@@ -158,7 +158,7 @@ object UserDo {
             "disguiser" -> {
                 Messages.sendMessage(game.adminChannel, message.author.name + " is going to be disguised as " + mentioned!!.effectiveName + " in role.")
                 MafiaConfig.setExtra(message, mentioned.user.idLong)
-                MafiaListener.addDirtyValue(Triple(mentioned, Details.EXTRA, 0L))
+                //MafiaListener.addDirtyValue(Triple(mentioned, Details.EXTRA, 0L))
                 Messages.sendDM(message.author, "You will be disguising as " + mentioned!!.effectiveName)
                 message.delete()
             }

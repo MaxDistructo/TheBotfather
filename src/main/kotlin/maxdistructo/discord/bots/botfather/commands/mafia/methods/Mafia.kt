@@ -1,6 +1,6 @@
 package maxdistructo.discord.bots.botfather.commands.mafia.methods
 
-import maxdistructo.discord.bots.botfather.commands.mafia.MafiaListener
+//import maxdistructo.discord.bots.botfather.commands.mafia.MafiaListener
 import maxdistructo.discord.bots.botfather.commands.mafia.obj.Details
 import maxdistructo.discord.bots.botfather.commands.mafia.obj.Game
 import maxdistructo.discord.bots.botfather.commands.mafia.obj.Player
@@ -69,7 +69,7 @@ object Mafia {
             toggleToNight(message)
         } else {
             println("Changing to Day")
-            MafiaListener.fixDirty(message)
+            //MafiaListener.fixDirty(message)
             println("Fixed Dirty Values")
             toggleToDay(message)
         }
