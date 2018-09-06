@@ -34,51 +34,77 @@ object BaseBot{
             logger.level = Level.INFO
         }
     }
-    fun baseCommandToCommand(commands : List<BaseCommand>, files : List<File>){
-int i = 0
-for(value in commands){
-val file = File(files[i])
-val fileLines = file.toLines()
-val name = toClassName(value.commandName)
-val requiresMod = if(fileLines.contains("override val requiresMod"){true} else{false}
-val requiresAdmin = value.requiresAdmin
-val helpMessage = value.helpMessage
-
-
-println("Your New Class: \n")
-println("class $name : Command(){"
-println("	init {"
-println("		this.name = $name"
-println("		this.help = $helpMessage"
-if(requiresMod || requiresAdmin){
-println("		this.requiredRole = /"Mafia Admin/""
-}
-println("		this.guildOnly = true"
-println("	}"
-println("override fun execute (event : CommandEvent){"
-var lookingForStart : Boolean = true
-for(line in file.toLines()){ //Replace with actual to lines code
-	if(lookingForStart){
-		if(line.contains("override fun init(message : Message, args : List<String>): String /{") //Starting line of the init function that needs to be copied except for the return method.
-			lookingForStart = false
+    fun baseCommandToCommand(files : List<File>){
+	int i = 0
+	for(value in files){
+		val fileLines = value.toLines()
+		val name = toClassName(value.commandName)
+		val requiresMod = getterValueGetter(value, "override val requiresMod")
+		val requiresAdmin = if(fileLines.contains("override val requiresAdmin"){true} else{false}
+		val helpMessage = helpMessageGetter(value)
+		println("class $name : Command(){"
+		println("	init {"
+		println("		this.name = $name"
+		println("		this.help = $helpMessage"
+		if(requiresMod || requiresAdmin){
+			println("		this.requiredRole = /"Mafia Admin/""
 		}
+		println("		this.guildOnly = true"
+		println("	}"
+		println("override fun execute (event : CommandEvent){"
+		var lookingForStart : Boolean = true
+		
+		for(line in file.toLines()){ //Replace with actual to lines code
+			if(lookingForStart){
+				if(line.contains("override fun init(message : Message, args : List<String>): String {") //Starting line of the init function that needs to be copied except for the return method.
+					lookingForStart = false
+				}
+			}
+			else{
+				if(!line.contains("return /"/""){
+					println(line)
+				}
+				else{
+					break
+				}
+			}
+
+		}
+		println("	}")
+		println("}")
+		println("\n")
+		println("\n")
+		i++
 	}
-	else{
-		if(!line.contains("return /"/""){
-			println(line)
+}
+private fun helpMessageGetter(file : File) : String{
+	val lines = file.toLines()
+	val looking = true
+	for(value in lines){
+		if(looking){
+			if(value = "override val helpMessage : String"){
+				looking = false
+			}
 		}
 		else{
-			break
+			return value.split(" ")[2].toString()
 		}
 	}
-
+	return ""
 }
-println("	}")
-println("}")
-println("\n")
-println("\n")
-i++
+private fun getterValueGetter(file : File, valueName : String) : Boolean{
+	val lines = file.toLines()
+	val looking = true
+	for(value in lines){
+		if(looking){
+			if(value = "override val $valueName : Boolean"){
+				looking = false
+			}
+		}
+		else{
+			return Boolean.parseBoolean(value.split(" ")[2].toString())
+		}
+	}
+	return ""
 }
-}
-
 }
