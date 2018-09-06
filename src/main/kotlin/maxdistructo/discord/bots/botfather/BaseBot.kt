@@ -34,5 +34,51 @@ object BaseBot{
             logger.level = Level.INFO
         }
     }
+    fun baseCommandToCommand(commands : List<BaseCommand>, files : List<File>){
+int i = 0
+for(value in commands){
+val file = File(files[i])
+val fileLines = file.toLines()
+val name = toClassName(value.commandName)
+val requiresMod = if(fileLines.contains("override val requiresMod"){true} else{false}
+val requiresAdmin = value.requiresAdmin
+val helpMessage = value.helpMessage
+
+
+println("Your New Class: \n")
+println("class $name : Command(){"
+println("	init {"
+println("		this.name = $name"
+println("		this.help = $helpMessage"
+if(requiresMod || requiresAdmin){
+println("		this.requiredRole = /"Mafia Admin/""
+}
+println("		this.guildOnly = true"
+println("	}"
+println("override fun execute (event : CommandEvent){"
+var lookingForStart : Boolean = true
+for(line in file.toLines()){ //Replace with actual to lines code
+	if(lookingForStart){
+		if(line.contains("override fun init(message : Message, args : List<String>): String /{") //Starting line of the init function that needs to be copied except for the return method.
+			lookingForStart = false
+		}
+	}
+	else{
+		if(!line.contains("return /"/""){
+			println(line)
+		}
+		else{
+			break
+		}
+	}
+
+}
+println("	}")
+println("}")
+println("\n")
+println("\n")
+i++
+}
+}
 
 }
