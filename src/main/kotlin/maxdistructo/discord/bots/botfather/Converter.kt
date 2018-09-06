@@ -38,10 +38,19 @@ object Converter{
     }
          //All classes the extend BaseCommand() have been collected from the file and now they need to be processed into the new format.
          
-         if(!imports.contains("")){ //import for Command and CommandEvent
+         if(!imports.contains("")){ //import for Command and CommandEvent(If 1 is imported, most likely the other is as the Execute method requires the other.
           imports += "import com.jagrock" //Package for Command
           imports += "import com.jagrock" //Package for CommandEvent
          }
+         
+         var name : String = ""
+         var roleRequirement : Boolean = false
+         var helpMessage : String = ""
+         
+         for(value in classLists){ //Start all conversion. Can also be simply stated as collection of data from existing code.
+           
+         }
+         
   }
 
 }
