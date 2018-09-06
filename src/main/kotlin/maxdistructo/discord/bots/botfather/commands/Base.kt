@@ -16,7 +16,7 @@ object Base {
             return "Pong!"
         }
         override val hasOutput: Boolean
-            get() = false
+            get() = true
     }
     class Say : BaseCommand(){
         override val commandName: String
@@ -24,7 +24,7 @@ object Base {
         override val helpMessage: String
             get() = "say <MessageToSay> - Says what you tell it to say"
         override val hasOutput: Boolean
-            get() = false
+            get() = true
 
         override fun init(message: Message, args: List<String>): String {
             val mentionedChannel : TextChannel? = if(message.mentionedChannels.size > 0) {

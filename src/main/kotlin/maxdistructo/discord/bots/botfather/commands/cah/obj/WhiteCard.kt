@@ -1,11 +1,13 @@
 package maxdistructo.discord.bots.botfather.commands.cah.obj
 
+import maxdistructo.discord.bots.botfather.commands.cah.init.ICAHCard
+
 /**
 * @class WhiteCard
 * Used to represent a WhiteCard from Cards Against Humanity
 */
 
-class WhiteCard : ICAHCard{
+class WhiteCard : ICAHCard {
 
 override val color = CardColor.WHITE
 override val text : String
@@ -13,7 +15,7 @@ override var blankValues : List<String>
 
 constructor(textIn : String, vararg values : String){
   text = textIn
-  blankValues = values
+  blankValues = values.toList()
 } 
 
 constructor(textIn : String){

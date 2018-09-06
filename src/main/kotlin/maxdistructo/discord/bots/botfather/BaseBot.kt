@@ -25,9 +25,9 @@ object BaseBot{
     fun main(args : Array<String>){
         bot = Bot(Config.readToken())
         bot.registerListener(maxdistructo.discord.bots.botfather.background.logging.Logger())
-        bot.registerCommands(PingCommand(), Base.Say(), MafiaCommands.MafiaBaseCommand(), Check(), Debug(), AboutCommand(Color.BLUE, "MaxDistructo's Bot", arrayOf("Mafia Games", "Horoscope", "Player Fun Commands")) )
+        bot.registerCommands(PingCommand(), MafiaCommands.MafiaBaseCommand(), AboutCommand(Color.BLUE, "MaxDistructo's Bot", arrayOf("Mafia Games", "Horoscope", "Player Fun Commands")))
         bot.init()
-        bot.commandAPI.listener = Listener()
+       //bot.commandAPI.listener = Listener()
         client = bot.client
         logger = bot.logger
         if(!Config.checkDebug()){

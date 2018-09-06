@@ -36,5 +36,6 @@ enum class Roles(name : String) {
     SELF("self"),
     GUILT("guilt"),
     ADMIN("admin"),
+    JAILOR("jailor"),
     admin("admin")
 }

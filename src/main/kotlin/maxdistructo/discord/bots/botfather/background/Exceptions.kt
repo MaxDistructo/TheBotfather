@@ -2,26 +2,16 @@ package maxdistructo.discord.bots.botfather.background
 
 object Exceptions{
 
-  class BasicException(message : String?, functionName : String) : Exception(error){
-    val error : String
-    init{
-      if(errorMessage == null){
-        error = "Unkown Error Message from $functionName"
-      }
-      else{
-        error = message
-      }
-    }
+  open class BasicException(message : String?, functionName : String) : Exception(){
+    private val error : String = message ?: "Unknown Error Message from $functionName"
   }
-  class CahException(errorMessage : String?) : BasicException(error){
-    val error : String
+
+  private val errorVal: String? = ""
+
+  class CahException(errorMessage : String?) : BasicException(errorVal, "Cards Against Humanity"){
+    private var errorVal : String = ""
     init{
-      if(errorMessage == null){
-        error = "Unknown CAH Module Exception"  
-      }
-      else{
-        error = errorMessage
-      }
+      errorVal = errorMessage ?: "Unknown CAH Module Exception"
     }
   }
 

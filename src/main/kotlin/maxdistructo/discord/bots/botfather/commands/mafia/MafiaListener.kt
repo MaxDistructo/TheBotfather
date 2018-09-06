@@ -13,7 +13,9 @@ object MafiaListener {
         val e = event.event
         val message = e.message
         val args = message.contentDisplay.split(" ")
+        BaseBot.logger.debug("Mafia Command Triggered")
         if(args[0] == BaseBot.bot.commandAPI.prefix + "mafia"){ //Double Check that the right command triggered this code
+            BaseBot.logger.debug("Command is double valid.")
             var isError = true
             for(command in commands){
                 if(command.name == args[1].toLowerCase()){

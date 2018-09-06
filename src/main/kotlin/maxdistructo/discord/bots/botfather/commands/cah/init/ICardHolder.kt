@@ -1,9 +1,12 @@
 package maxdistructo.discord.bots.botfather.commands.cah.init
 
+import maxdistructo.discord.bots.botfather.background.Exceptions
+import java.util.*
+
 interface ICardHolder{
 
 val MAX_NUM : Int //Used as a static value to know how many cards the holder can have at maximum.
-val cards : LinkedMutableList<ICAHCard> //Actual list of the cards in the holder
+val cards : LinkedList<ICAHCard> //Actual list of the cards in the holder
 val name : String
 
   fun addCard(card : ICAHCard){
@@ -11,7 +14,7 @@ val name : String
   }
   
   fun removeCard(card : ICAHCard){
-    val removeCard : ICAHCard? = null
+    var removeCard : ICAHCard? = null
     for(value in cards){
       if(value == card){
         removeCard = value

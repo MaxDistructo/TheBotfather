@@ -1,6 +1,8 @@
 package maxdistructo.discord.bots.botfather.commands.cah.obj
 
-class BlackCard : ICAHCard{
+import maxdistructo.discord.bots.botfather.commands.cah.init.ICAHCard
+
+class BlackCard : ICAHCard {
 
 override val color = CardColor.BLACK
 override val text : String
@@ -8,7 +10,7 @@ override var blankValues : List<String>
 
 constructor(textIn : String, vararg values : String){
   text = textIn
-  blankValues = values
+  blankValues = values.toList()
 } 
 
 constructor(textIn : String){

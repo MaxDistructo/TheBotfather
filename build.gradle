@@ -17,12 +17,15 @@ repositories {
 jcenter()
 mavenCentral()
 maven { url 'https://jitpack.io' }
+	maven { url "https://dl.bintray.com/dv8fromtheworld/maven" }
 }
 // In this section you declare the dependencies for your production and test code
 dependencies {
-	//implementation 'com.github.MaxDistructo:mdCore-JDA:1.4.0'
+	implementation 'com.github.MaxDistructo:mdCore-JDA:1.4.1'
 	compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
 	compile "com.mashape.unirest:unirest-java:1.4.9"
+// The production code uses the SLF4J logging API at compile time
+	//Below Dependencies for Core
 	compile 'org.slf4j:slf4j-api:1.7.25'
 	compile group: 'org.jetbrains.kotlin', name: 'kotlin-stdlib-jdk8', version:'1.2.61'
 	compile group: 'org.jetbrains.kotlinx', name: 'kotlinx-coroutines-core', version:'0.24.0'
@@ -32,7 +35,6 @@ dependencies {
 	compile group: 'ch.qos.logback', name: 'logback-classic', version:'1.2.3'
 	compile 'net.dv8tion:JDA:3.7.1_407'
 	compile 'com.jagrosh:jda-utilities:2.1.4'
-// The production code uses the SLF4J logging API at compile time
 
 }
 compileKotlin {

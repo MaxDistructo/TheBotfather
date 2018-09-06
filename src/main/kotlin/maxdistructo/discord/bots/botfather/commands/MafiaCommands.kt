@@ -19,54 +19,56 @@ import net.dv8tion.jda.core.entities.Message
 
 object MafiaCommands {
     class MafiaBaseCommand : Command(){
-        override fun getName(): String {
-            return "mafia"
-        }
-
-        override fun getHelp(): String {
-            return "mafia - Mafia Game System"
-        }
-        override fun getChildren(): Array<Command> {
-            return arrayOf(Do(), Join(), Continue(), Start(), Info(), ModInfo(), RoleCard(), SetRole(), KillCommand(), JailPlayer(), Vote(), AdminMessage(), Action(), Generate(), Leave(), Fixer())
-        }
-        override fun execute(event: CommandEvent?) {
-            MafiaListener.mafiaCommandEvent(event!!) //Simple Pass-through Function
+        override fun execute(event: CommandEvent) {
+            event.replyInDm("Please use a mafia subcommand.")
         }
         init{
-            MafiaListener.registerCommands(Do(), Join(), Continue(), Start(), Info(), ModInfo(), RoleCard(), SetRole(), KillCommand(), JailPlayer(), Vote(), AdminMessage(), Action(), Generate(), Leave(), Fixer())
+            this.name = "mafia"
+            this.help = "Mafia Game Commands"
+            this.arguments = argBuilder()
+            this.children = arrayOf(Do(), Join(), Continue(), RoleCard(), KillCommand(), JailPlayer())
+        }
+        private fun argBuilder() : String{
+            val builder = StringBuilder()
+            for (value in this.getChildren()){
+                builder.append(value)
+                builder.append(",")
+            }
+            return builder.toString()
         }
     }
 
-    class Do : MafiaCommand(){
-        override val commandName: String
-            get() = "do"
-        override val helpMessage: String
-            get() = "mafia do <User> - Uses your night action on the provided user"
-        override fun init(message: Message, args: List<String>): String {
-            UserDo.message(message, PrivUtils.listToArray(args) as Array<Any>)
-            return ""
+    class Do : Command(){
+        init {
+            this.name = "do"
+            this.help = "Uses your night action on the provided user"
+            this.arguments = "<User>"
+            this.guildOnly = true
+        }
+        override fun execute(event: CommandEvent) {
+            UserDo.message(event.message, PrivUtils.listToArray(event.message.contentDisplay.split(" ")) as Array<Any>)
         }
     }
-    class Join : MafiaCommand(){
-        override val commandName: String
-            get() = "join"
-        override val helpMessage: String
-            get() = "mafia join - Adds yourself to the next mafia game"
-        override fun init(message: Message, args: List<String>): String {
-            Mafia.onGameJoinCommand(message)
-            return ""
+
+    class Join : Command(){
+        init {
+            this.name = "join"
+            this.help = "Adds you to the next mafia game"
+            this.guildOnly = true
+        }
+        override fun execute(event: CommandEvent) {
+            Mafia.onGameJoinCommand(event.message)
         }
     }
-    class Continue : MafiaCommand(){
-        override val commandName: String
-            get() = "continue"
-        override val helpMessage: String
-            get() = "mafia continue - Moves the game forward to the next night/day"
-        override val requiresMod: Boolean
-            get() = true
-        override fun init(message: Message, args: List<String>): String {
-            Mafia.onGameToggle(message)
-            return ""
+    class Continue : Command(){
+        init{
+            this.name = "continue"
+            this.help = "Continues the Mafia Game"
+            this.requiredRole = "Mafia Admin"
+            this.guildOnly = true
+        }
+        override fun execute(event: CommandEvent?) {
+            Mafia.onGameToggle(event!!.message)
         }
     }
     class Start : MafiaCommand(){
@@ -105,14 +107,16 @@ object MafiaCommands {
             return ""
         }
     }
-    class RoleCard : MafiaCommand(){
-        override val commandName: String
-            get() = "rolecard"
-        override val helpMessage: String
-            get() = "mafia rolecard <RoleName> - Shows the role card for the specified role"
-        override fun init(message: Message, args: List<String>): String {
-            Messages.sendMessage(message.textChannel, RoleCards.onRoleCardAsk(message, args[2], message.member))
-            return ""
+    class RoleCard : Command(){
+        init{
+            this.name = "rolecard"
+            this.help = "Shows the rolecard for a specified role"
+            this.guildOnly = true
+        }
+        override fun execute(event: CommandEvent?) {
+            val message = event!!.message
+            val args = event.event.message.contentDisplay.split(" ")
+            Messages.sendMessage(message.textChannel, RoleCards.onRoleCardAsk(message, args[2].toLowerCase(), message.member))
         }
     }
     class SetRole : MafiaCommand(){
@@ -131,42 +135,48 @@ object MafiaCommands {
         }
     }
 
-    class KillCommand : MafiaCommand(){
-        override val commandName: String
-            get() = "kill"
-        override val helpMessage: String
-            get() = "mafia kill <User> <killer|-2kill killer1 killer2|-3kill killer1 killer2 killer3|-clean> - Kills the provided user in the specified way"
-        override val requiresMod: Boolean
-            get() = true
-
-        override fun init(message: Message, args: List<String>): String {
+    class KillCommand : Command(){
+        init{
+            this.name = "kill"
+            this.help = "Kills the provided user"
+            this.arguments = "<User> <killer|-2kill killer1 killer2|-3kill killer1 killer2 killer3|-clean>"
+            this.guildOnly = true
+        }
+        override fun execute(event: CommandEvent?) {
+            val message = event!!.message
+            val args = event.event.message.contentDisplay.split(" ")
             val game = Game(Utils.readJSONFromFile("/config/mafia/" + message.guild.idLong + "_dat.txt"))
             Mafia.killPlayer(message, Utils.getUserFromInput(message, args[2])!!.user.idLong)
             Webhook.send(game.dayChannel, "Graveyard", "https://cdn.discordapp.com/emojis/294160585179004928.png", Kill.message(message, PrivUtils.listToArray(args) as Array<Any>))
             message.delete()
-            return ""
         }
     }
 
-    class JailPlayer : MafiaCommand(){
-        override val commandName: String
-            get() = "jail"
-        override val helpMessage: String
-            get() = "mafia jail <User> - Jails the provided user"
-        override val roleRestriction: String
-            get() = "jailor"
-
-        override fun init(message: Message, args: List<String>): String {
+    class JailPlayer : Command(){
+        init{
+            this.name = "jail"
+            this.help = "Jails the provided user"
+            this.arguments = "<User>"
+            this.guildOnly = true
+        }
+        override fun execute(event: CommandEvent?) {
+            val message = event!!.message
+            val args = event.event.message.contentDisplay.split(" ")
             val game = Game(Utils.readJSONFromFile("/config/mafia/" + message.guild.idLong + "_dat.txt"))
-            if (Utils.getUserFromInput(message, args[2])!! === message.member) {
-                Messages.sendDM(message.author, "You can not jail yourself!")
-            } else {
-                Mafia.jailPlayer(message, Utils.getUserFromInput(message, args[2])!!)
-                Messages.sendDM(message.author, "You will be Jailing " + Utils.getMentionedUser(message))
-                Messages.sendMessage(game.adminChannel, "The jailor has jailed " + Utils.getUserFromInput(message, args[2])!!.effectiveName)
+            val player = Player(message, message.member)
+            if(player.role == Roles.JAILOR) {
+                if (Utils.getUserFromInput(message, args[2])!! === message.member) {
+                    Messages.sendDM(message.author, "You can not jail yourself!")
+                } else {
+                    Mafia.jailPlayer(message, Utils.getUserFromInput(message, args[2])!!)
+                    Messages.sendDM(message.author, "You will be Jailing " + Utils.getUserFromInput(message, args[2])!!.effectiveName)
+                    Messages.sendMessage(game.adminChannel, "The jailor has jailed " + Utils.getUserFromInput(message, args[2])!!.effectiveName)
+                }
+            }
+            else{
+                Messages.sendDM(message.author, "You attempted to drag " + Utils.getUserFromInput(message, args[2])!!.effectiveName + " to the Jail but they fought you off.")
             }
             message.delete()
-            return ""
         }
     }
 
