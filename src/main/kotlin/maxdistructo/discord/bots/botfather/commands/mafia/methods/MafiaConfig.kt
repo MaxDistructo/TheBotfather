@@ -74,16 +74,16 @@ object MafiaConfig {
 
     fun getPlayerDetails(message: Message, playerID: Long): Array<Any> {
         val perms = Perms(message.guild)
-        return if (perms.checkMod(playerID)) {
+        return if (!perms.checkMod(playerID)) {
             val root1 = Utils.readJSONFromFile("/config/mafia/" + message.guild.idLong + "_playerdat.txt")
             val root = root1.getJSONObject("" + playerID)
             val list = arrayListOf<Any>(root.getString("alignment"), root.getString("class"), root.getString("role"), message.guild.getMemberById(playerID).roles.contains(Roles.getRole(message, "Dead(Mafia)")), root.getInt("attack"), root.getInt("defense"), root.get("extra"))
             list.toArray()
-            // } else if(perms.checkMod(playerID) && message.guild.getMemberById(playerID).roles.contains(message.guild.getRolesByName("Alive(Mafia)", false)[0]) || message.guild.getMemberById(playerID).roles.contains(message.guild.getRolesByName("Dead(Mafia)", false)[0])){
-            //   val root1 = Utils.readJSONFromFile("/config/mafia/" + message.guild.idLong + "_playerdat.txt")
-            // val root = root1.getJSONObject("" + message.author.idLong)
-            //val list = arrayListOf<Any>(root.getString("alignment"), root.getString("class"), root.getString("role"), message.member.roles.contains(Roles.getRole(message, "Dead(Mafia)")), root.getInt("attack"), root.getInt("defense"), root.get("extra"))
-            //return list.toArray()
+            } else if(perms.checkMod(playerID) && message.guild.getMemberById(playerID).roles.contains(message.guild.getRolesByName("Alive(Mafia)", false)[0]) || message.guild.getMemberById(playerID).roles.contains(message.guild.getRolesByName("Dead(Mafia)", false)[0])){
+              val root1 = Utils.readJSONFromFile("/config/mafia/" + message.guild.idLong + "_playerdat.txt")
+             val root = root1.getJSONObject("" + message.author.idLong)
+            val list = arrayListOf<Any>(root.getString("alignment"), root.getString("class"), root.getString("role"), message.member.roles.contains(Roles.getRole(message, "Dead(Mafia)")), root.getInt("attack"), root.getInt("defense"), root.get("extra"))
+            return list.toArray()
         } else {
             val list = arrayListOf<Any>("admin", "admin", "admin", false, 3, 3,"")
             list.toArray()

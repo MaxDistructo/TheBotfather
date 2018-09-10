@@ -151,25 +151,32 @@ object Toggle {
         val daynumber = game.dayNum
         game.dayChannel.manager.setTopic("Day " + daynumber + " - " +  message.guild.getMembersWithRoles(message.guild.getRolesByName("Alive(Mafia)", false)[0]) + " alive, "  + message.guild.getMembersWithRoles(message.guild.getRolesByName("Dead(Mafia)", false)[0]) + " dead").complete(true)
     }
-
     fun fixRoles(message : Message, game : Game){
+        fixRoles(message, game,false)
+    }
+    fun fixRoles(message : Message, game : Game, isStart : Boolean){
+        val justJoined = MafiaConfig.getPlayers(message, "PreJoin(Mafia)")
+        for(user in justJoined){
+            message.guild.controller.removeRolesFromMember(message.guild.getMemberById(user), Roles.getRole(message, "PreJoin(Mafia)"))
+            message.guild.controller.addRolesToMember(message.guild.getMemberById(user), Roles.getRole(message, "Mafia Folks"))
+        }
         val players = MafiaConfig.getPlayers(message, "Mafia Folks")
         for (player in players) {
-            val aliveRole = Roles.getRole(message, "Mafia(Alive)")!!
-            val deadRole = Roles.getRole(message, "Mafia(Dead)")!!
+            val aliveRole = Roles.getRole(message, "Alive(Mafia)")!!
+            val deadRole = Roles.getRole(message, "Dead(Mafia)")!!
             message.guild.controller.removeRolesFromMember(message.guild.getMemberById(player), deadRole).complete(true)
             message.guild.controller.addRolesToMember(message.guild.getMemberById(player), aliveRole).complete(true)
-            val playerInfo = MafiaConfig.getPlayerDetails(message)
-            if (playerInfo[2].toString() == "spy" || playerInfo[2].toString() == "blackmailer") {
-                Perms.allowSpyChat(message, message.guild.getMemberById(player))
-            } else if (playerInfo[2].toString() == "medium") {
-                Perms.allowMediumChat(message, message.guild.getMemberById(player))
-            }
-            else if(playerInfo[2].toString() == "vampire"){
-                game.vampChannel.createPermissionOverride(message.guild.getMemberById(player)).setAllow(Permission.MESSAGE_READ).setDeny(Permission.MESSAGE_WRITE).complete(true)
-            }
-            else if(playerInfo[2].toString() == "vampire_hunter"){
-                game.vamphunterChannel.createPermissionOverride(message.guild.getMemberById(player)).setAllow(Permission.MESSAGE_READ).setDeny(Permission.MESSAGE_WRITE).complete(true)
+            if(!isStart) {
+                val playerInfo = MafiaConfig.getPlayerDetails(message)
+                if (playerInfo[2].toString() == "spy" || playerInfo[2].toString() == "blackmailer") {
+                    Perms.allowSpyChat(message, message.guild.getMemberById(player))
+                } else if (playerInfo[2].toString() == "medium") {
+                    Perms.allowMediumChat(message, message.guild.getMemberById(player))
+                } else if (playerInfo[2].toString() == "vampire") {
+                    game.vampChannel.createPermissionOverride(message.guild.getMemberById(player)).setAllow(Permission.MESSAGE_READ).setDeny(Permission.MESSAGE_WRITE).complete(true)
+                } else if (playerInfo[2].toString() == "vampire_hunter") {
+                    game.vamphunterChannel.createPermissionOverride(message.guild.getMemberById(player)).setAllow(Permission.MESSAGE_READ).setDeny(Permission.MESSAGE_WRITE).complete(true)
+                }
             }
         }
     }

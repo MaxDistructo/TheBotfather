@@ -25,7 +25,7 @@ object MafiaCommands {
             this.name = "mafia"
             this.help = "Mafia Game Commands"
             this.arguments = argBuilder()
-            this.children = arrayOf(Do(), Join(), Continue(), RoleCard(), KillCommand(), JailPlayer(), Vote())
+            this.children = arrayOf(Do(), Join(), Continue(), RoleCard(), KillCommand(), JailPlayer(), Vote(), ModInfo(), Start())
         }
         private fun argBuilder() : String{
             val builder = StringBuilder()
@@ -70,16 +70,15 @@ object MafiaCommands {
             Mafia.onGameToggle(event!!.message)
         }
     }
-    class Start : MafiaCommand(){
-        override val commandName: String
-            get() = "start"
-        override val helpMessage: String
-            get() = "mafia start - Starts the mafia game with all joined players"
-        override val requiresMod: Boolean
-            get() = true
-        override fun init(message: Message, args: List<String>): String {
-            Mafia.onGameStart(message)
-            return ""
+    class Start : Command(){
+        init{
+            this.name = "start"
+            this.help = "mafia start - Starts the mafia game with all joined players"
+            this.guildOnly = true
+            this.requiredRole = "Mafia Admin"
+        }
+        override fun execute(event: CommandEvent?) {
+            Mafia.onGameStart(event!!.message)
         }
     }
     class Info : MafiaCommand(){
@@ -93,17 +92,19 @@ object MafiaCommands {
             return ""
         }
     }
-    class ModInfo : MafiaCommand(){
-        override val commandName: String
-            get() = "getInfo"
-        override val helpMessage: String
-            get() = "mafia getInfo <@User> - Gets info on the specified user"
-        override val requiresMod: Boolean
-            get() = true
-        override fun init(message: Message, args: List<String>): String {
+    class ModInfo : Command(){
+        init{
+            this.name = "getInfo"
+            this.help = "mafia getInfo - Gets info on the specified user"
+            this.requiredRole = "Mafia Admin"
+            this.guildOnly = true
+        }
+
+        override fun execute(event: CommandEvent?) {
+            val message = event!!.message
+            val args = message.contentDisplay.split(" ")
             val details = MafiaConfig.getPlayerDetails(message, Mafia.getUserFromInput(message, args[2])!!.user.idLong)
             Messages.sendDM(message.author, Messages.simpleEmbed(Mafia.getUserFromInput(message, args[2])!!, "Mafia Details","Alignment: " + details[0] + "\nClass: " + details[1] + "\nRole: " + details[2] + "\nIs Dead: " + details[3] + "\nAttack Power: " + details[4] + "\nDefence Power: " + details[5], message))
-            return ""
         }
     }
     class RoleCard : Command(){

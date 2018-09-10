@@ -42,6 +42,7 @@ object Mafia {
         //MafiaListener.registerHandler(RolelistHandler.Handler(Messages.sendMessage(dayChannel, "RoleList: ")))
         //MafiaListener.registerHandler(VoteCountHandler.Handler(Messages.sendMessage(game.dayChannel, "Votes: ")))
         //MafiaListener.resetHandlers(message)
+        Toggle.fixRoles(message, game, true)
         println("Resetting Player Dat")
         File(s + "/config/mafia/" + message.guild.idLong + "_playerdat.txt").delete()
         println("Generating roles for players")
@@ -57,6 +58,9 @@ object Mafia {
         Messages.sendMessage(dayChannel, message.guild.getRolesByName("Mafia Folks", false)[0].asMention + " The Mafia game has started! \n Day 1 has begun!", true)
         Messages.sendMessage(adminChannel, message.member.effectiveName + "#" + message.author.discriminator + " has started the Mafia game.", false)
         unjail(message)
+
+        Toggle.fixAlivePlayerPermsDay(message, game)
+        Toggle.updateTopic(message, game)
 
         //MafiaListener.updateHandlers(message)
     }
