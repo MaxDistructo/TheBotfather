@@ -72,7 +72,7 @@ class Perms(guild : Guild) : IPerms {
 
         fun allowMediumChat(message: Message, user: Member) {
             val game = Game(Utils.readJSONFromFile("/config/mafia/" + message.guild.idLong + "_dat.txt"))
-            game.mediumChannel.createPermissionOverride(user).setAllow(Permission.MESSAGE_READ).submit(true)
+            game.mediumChannel.createPermissionOverride(user).setAllow(Permission.MESSAGE_READ, Permission.MESSAGE_WRITE).submit(true)
         }
 
         fun allowJailorChat(message: Message, user: Member) {
