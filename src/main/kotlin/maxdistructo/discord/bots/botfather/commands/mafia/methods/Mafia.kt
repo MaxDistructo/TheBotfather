@@ -191,7 +191,7 @@ object Mafia {
         val game = Game(Utils.readJSONFromFile("/config/mafia/" + message.guild.idLong + "_dat.txt"))
         for (player in players) {
             val permissionChannels = listOf(game.mafiaChannel, game.jailorChannel, game.jailedChannel, game.mediumChannel, game.deadChannel,
-                    game.spyChannel, game.vampChannel, game.vamphunterChannel)
+                    game.spyChannel, game.vampChannel, game.vamphunterChannel, game.dayChannel)
             for(channel in permissionChannels){
                 val userOverrides = channel.memberPermissionOverrides
                 for(override in userOverrides){

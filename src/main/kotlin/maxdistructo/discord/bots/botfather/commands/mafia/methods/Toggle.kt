@@ -43,6 +43,12 @@ object Toggle {
                 if (playerInfo.roleString == "vampire_hunter") {
                     game.vamphunterChannel.createPermissionOverride(message.guild.getMemberById(player)).setAllow(Permission.MESSAGE_READ).setDeny(Permission.MESSAGE_WRITE).submit(true)
                 }
+                if (playerInfo.roleString == "spy" || playerInfo.roleString == "blackmailer") {
+                    Perms.allowSpyChat(message, message.guild.getMemberById(player))
+                }
+                else{
+                    Perms.denySpyChat(message, message.guild.getMemberById(player))
+                }
                 Perms.denyMediumChat(message, message.guild.getMemberById(player))
             }
         }
@@ -54,8 +60,6 @@ object Toggle {
                 val playerInfo = MafiaConfig.getPlayerDetails(message, player)
                 if (playerInfo[0].toString() == "mafia") {//check if mafia
                     game.mafiaChannel.createPermissionOverride(message.guild.getMemberById(player)).setAllow(Permission.MESSAGE_WRITE, Permission.MESSAGE_READ).complete(true)
-                } else {
-                    game.mafiaChannel.createPermissionOverride(message.guild.getMemberById(player)).setDeny(Permission.MESSAGE_WRITE, Permission.MESSAGE_READ).complete(true)
                 }
                 println("Ran Mafia Toggle")
                 if (playerInfo[2].toString() == "jailor") {
@@ -89,10 +93,10 @@ object Toggle {
                     Perms.denySpyChat(message, message.guild.getMemberById(player))
                 }
                 println("Ran Spy Toggle")
-                if (playerInfo[0].toString() == "vampire") {
+                if (playerInfo[2].toString() == "vampire") {
                     game.vampChannel.createPermissionOverride(message.guild.getMemberById(player)).setAllow(Permission.MESSAGE_READ, Permission.MESSAGE_WRITE).complete(true)
                 }
-                if (playerInfo[0].toString() == "vampire_hunter") {
+                if (playerInfo[2].toString() == "vampire_hunter") {
                     game.vamphunterChannel.createPermissionOverride(message.guild.getMemberById(player)).setAllow(Permission.MESSAGE_READ, Permission.MESSAGE_WRITE).complete(true)
                 }
                 Perms.denyDayChat(message, message.guild.getMemberById(player))
@@ -105,15 +109,24 @@ object Toggle {
         for(player in MafiaConfig.getPlayers(message ,"Mafia Folks")) {
             if (message.guild.getMemberById(player).roles.contains(message.guild.getRolesByName("Dead(Mafia)", false)[0])) {
                 val user = Player(message, player)
-                game.dayChannel.getPermissionOverride(message.guild.getMember(user.user)).delete().complete(true)
+                try {
+                    game.dayChannel.getPermissionOverride(message.guild.getMember(user.user)).delete().complete(true)
+                }
+                catch(e : NullPointerException){} //If user does not have a day channel override, ignore the null pointer error.
                 Perms.denyDayChat(message, message.guild.getMemberById(player))
-                game.mafiaChannel.getPermissionOverride(message.guild.getMember(user.user)).delete().complete(true)
+                try {
+                    game.mafiaChannel.getPermissionOverride(message.guild.getMember(user.user)).delete().complete(true)
+                }
+                catch(e : NullPointerException){}
                 if (user.allignment == "mafia") {
                     Perms.denyMafChat(message, message.guild.getMemberById(player))
                 } else {
                     Perms.denyNonMaf(message, message.guild.getMemberById(player))
                 }
-                game.deadChannel.getPermissionOverride(message.guild.getMemberById(player)).delete().complete(true)
+                try {
+                    game.deadChannel.getPermissionOverride(message.guild.getMemberById(player)).delete().complete(true)
+                }
+                catch(e : NullPointerException) {}
                 Perms.allowDeadChat(message, message.guild.getMemberById(player))
             }
         }

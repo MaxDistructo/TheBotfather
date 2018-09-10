@@ -26,7 +26,7 @@ object MafiaCommands {
             this.name = "mafia"
             this.help = "Mafia Game Commands"
             this.arguments = argBuilder()
-            this.children = arrayOf(Do(), Join(), Continue(), RoleCard(), KillCommand(), JailPlayer())
+            this.children = arrayOf(Do(), Join(), Continue(), RoleCard(), KillCommand(), JailPlayer(), Vote())
         }
         private fun argBuilder() : String{
             val builder = StringBuilder()
@@ -180,13 +180,16 @@ object MafiaCommands {
         }
     }
 
-    class Vote : MafiaCommand(){
-        override val commandName: String
-            get() = "vote"
-        override val helpMessage: String
-            get() = "mafia vote <User> - Votes the specified user up to the stand."
+    class Vote : Command(){
+        init {
+            this.name = "vote"
+            this.help = "Votes for the specified user"
+            this.arguments = "<User>"
+            this.guildOnly = true
+        }
 
-        override fun init(message: Message, args: List<String>): String {
+        override fun execute(event: CommandEvent?) {
+            val message = event!!.message
             val player = Player(MafiaConfig.getPlayerDetails(message))
             if (player.role == Roles.MAYOR ) {
                 Messages.sendMessage(message.channel, message.member.toString() + " has voted for " + Utils.getMentionedUser(message)!!.asMention)
@@ -195,7 +198,6 @@ object MafiaCommands {
                 Messages.sendMessage(message.channel, message.member.toString() + " has voted for " + Utils.getMentionedUser(message)!!.asMention)
             }
             message.delete()
-            return ""
         }
     }
 

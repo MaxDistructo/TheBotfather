@@ -46,7 +46,13 @@ class Perms(guild : Guild) : IPerms {
 
         fun denyJailorChat(message: Message, userByID: Member) {
             val game = Game(Utils.readJSONFromFile("/config/mafia/" + message.guild.idLong + "_dat.txt"))
-            game.jailorChannel.createPermissionOverride(userByID).setDeny(Permission.MESSAGE_WRITE).submit(true)
+            try {
+                game.jailorChannel.createPermissionOverride(userByID).setDeny(Permission.MESSAGE_WRITE).submit(true)
+            }
+            catch(e : IllegalStateException){ //IllegalStateException caused by user already having a permission.
+                game.jailedChannel.getPermissionOverride(userByID).delete().complete()
+                game.jailorChannel.createPermissionOverride(userByID).setDeny(Permission.MESSAGE_WRITE).submit(true)
+            }
         }
 
         fun denyDayChat(message: Message, user: Member) {
