@@ -11,7 +11,7 @@ class Relays : ListenerAdapter() {
         val message = event.message
         val game = Game(Utils.readJSONFromFile("/config/mafia/" + message.guild.idLong + "_dat.txt"))
         val perms = Perms(message.guild)
-        if(!perms.checkMod(message)) {
+        if(!perms.checkMod(message) && !message.author.isBot) {
             if (message.channel.idLong == game.deadChannel.idLong) {
                 Webhook.send(game.mediumChannel, message.member.effectiveName, message.member.user.avatarUrl, message.contentRaw)
             }
