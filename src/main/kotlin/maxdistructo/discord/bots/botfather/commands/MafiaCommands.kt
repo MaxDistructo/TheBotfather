@@ -5,7 +5,6 @@ import com.jagrosh.jdautilities.command.CommandEvent
 import maxdistructo.discord.bots.botfather.background.EnumSelector
 import maxdistructo.discord.bots.botfather.background.PrivUtils
 import maxdistructo.discord.bots.botfather.commands.mafia.MafiaCommand
-import maxdistructo.discord.bots.botfather.commands.mafia.MafiaListener
 import maxdistructo.discord.bots.botfather.commands.mafia.action.ActionMessage
 import maxdistructo.discord.bots.botfather.commands.mafia.methods.*
 import maxdistructo.discord.bots.botfather.commands.mafia.obj.Game

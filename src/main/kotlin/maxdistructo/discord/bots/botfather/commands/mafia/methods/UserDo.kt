@@ -18,17 +18,17 @@ object UserDo {
             "mafioso" -> {
                 Messages.sendMessage(game.adminChannel, message.member.effectiveName + " has voted to kill " + mentioned!!.effectiveName)
                 Messages.sendDM(message.author, "You have voted to kill " + mentioned!!.effectiveName)
-                message.delete()
+                message.delete().complete()
             }
             "godfather" -> {
                 Messages.sendMessage(game.adminChannel, message.member.effectiveName + " has decided to kill " + mentioned!!.effectiveName)
                 Messages.sendDM(message.author, "You have decided to kill " + mentioned!!.effectiveName)
-                message.delete()
+                message.delete().complete()
             }
             "serial_killer" -> {
                 Messages.sendMessage(game.adminChannel, message.member.effectiveName + " is gonna go and stab " + mentioned!!.effectiveName)
                 Messages.sendDM(message.author, "You have decided to go and stab " + mentioned!!.effectiveName)
-                message.delete()
+                message.delete().complete()
             }
             "werewolf" -> {
                 Messages.sendMessage(game.adminChannel, message.member.effectiveName + " is gonna go and visit " + mentioned!!.effectiveName)
@@ -39,7 +39,7 @@ object UserDo {
                     val charArray = mentioned!!.effectiveName.toCharArray().slice(0 until (mentioned!!.effectiveName.toCharArray().size - 1))
                     Messages.sendDM(message.author, "You have decided to go and rampage at " + charArray.toString() + "'s house")
                 }
-                message.delete()
+                message.delete().complete()
             }
             "arsonist" -> {
                 if (mentioned!! !== message.author) {
@@ -49,23 +49,23 @@ object UserDo {
                     Messages.sendMessage(game.adminChannel, message.member.effectiveName + " is gonna set all doused players on fire")
                     Messages.sendDM(message.author, "You have decided to set all targets on fire tonight")
                 }
-                message.delete()
+                message.delete().complete()
             }
             "jester" -> {
                 Messages.sendMessage(game.adminChannel, message.member.effectiveName + " is gonna haunt " + mentioned!!.effectiveName)
                 Messages.sendDM(message.author, "You have decided to haunt " + mentioned!!.effectiveName)
-                message.delete()
+                message.delete().complete()
             }
             "veteran" -> {
                 Messages.sendMessage(game.adminChannel, message.member.effectiveName + " is going on alert tonight.")
                 Messages.sendDM(message.author, "You have decided to go on alert tonight")
                 MafiaConfig.setExtra(message, true)
-                message.delete()
+                message.delete().complete()
             }
             "vigilante" -> {
                 Messages.sendMessage(game.adminChannel, message.member.effectiveName + " is going to shoot " + mentioned!!.effectiveName)
                 Messages.sendDM(message.author, "You have decided to shoot " + mentioned!!.effectiveName)
-                message.delete()
+                message.delete().complete()
             }
             "jailor" -> {
                 if (mentioned!!.user.idLong == MafiaConfig.getJailed(message)) {
@@ -74,143 +74,143 @@ object UserDo {
                 } else {
                     Messages.sendDM(message.author, "You can only shoot the person you have jailed!")
                 }
-                message.delete()
+                message.delete().complete()
             }
             "vampire" -> {
                 Messages.sendMessage(game.adminChannel, "The vampires are going to try and convert " + mentioned!!.effectiveName)
                 Messages.sendDM(message.author, "You will be biting " + mentioned!!.effectiveName)
-                message.delete()
+                message.delete().complete()
             }
             "vampire_hunter" -> {
                 Messages.sendMessage(game.adminChannel, message.member.effectiveName + " will be checking and stabbing " + mentioned!!.effectiveName + " if they are a vampire")
                 Messages.sendDM(message.author, "You will be checking " + mentioned!!.effectiveName)
-                message.delete()
+                message.delete().complete()
             }
             "lookout" -> {
                 Messages.sendDM(message.author, "You will be watching " + mentioned!!.effectiveName + " tonight.")
                 Messages.sendMessage(game.adminChannel, message.member.effectiveName + " will be watching " + mentioned!!.effectiveName + " tonight.")
-                message.delete()
+                message.delete().complete()
             }
             "investigator" -> {
                 Messages.sendMessage(game.adminChannel, message.member.effectiveName + " would like to investigate " + mentioned!!.effectiveName + " tonight.")
                 Messages.sendDM(message.author, "You are going to investigate " + mentioned!!.effectiveName)
-                message.delete()
+                message.delete().complete()
             }
             "sheriff" -> {
                 Messages.sendMessage(game.adminChannel, message.member.effectiveName + "would like to interrogate " + mentioned!!.effectiveName + " tonight.")
                 Messages.sendDM(message.author, "You are going to be interrogating " + mentioned!! + " tonight.")
-                message.delete()
+                message.delete().complete()
             }
             "transporter" -> {
                 val target = Utils.getUserFromInput(message, messageContent[2])
                 val invest = Utils.getUserFromInput(message, messageContent[3])
                 Messages.sendMessage(game.adminChannel, message.member.effectiveName + " would like to swap positions of " + invest!!.effectiveName + " & " + target!!.effectiveName)
                 Messages.sendDM(message.author, "You will be transporting " + invest.effectiveName + " & " + target!!.effectiveName)
-                message.delete()
+                message.delete().complete()
             }
             "witch" -> {
                 val target = Utils.getUserFromInput(message, messageContent[2])
                 val invest = Utils.getUserFromInput(message, messageContent[3])
                 Messages.sendMessage(game.adminChannel, message.member.effectiveName + " would like to control " + invest!!.effectiveName + " into using their ability onto " + target!!.effectiveName)
                 Messages.sendDM(message.author, "You will be witching " + invest.effectiveName + " into " + target!!.effectiveName)
-                message.delete()
+                message.delete().complete()
             }
             "doctor" -> {
                 Messages.sendMessage(game.adminChannel, message.member.effectiveName + " will be healing " + mentioned!!.effectiveName + " tonight.")
                 Messages.sendDM(message.author, "You will be healing " + mentioned!!.effectiveName + " tonight.")
-                message.delete()
+                message.delete().complete()
             }
             "bodyguard" -> {
                 Messages.sendMessage(game.adminChannel, message.member.effectiveName + " will be guarding " + mentioned!!.effectiveName + " tonight.")
                 Messages.sendDM(message.author, "You will be guarding " + mentioned!!.effectiveName + " tonight.")
-                message.delete()
+                message.delete().complete()
             }
             "escort" -> {
                 Messages.sendMessage(game.adminChannel, message.member.effectiveName + " would like to roleblock " + mentioned!! + " tonight.")
                 Messages.sendDM(message.author, "You will be escorting " + mentioned!!.effectiveName + " tonight.")
-                message.delete()
+                message.delete().complete()
             }
             "consort" -> {
                 Messages.sendMessage(game.adminChannel, message.member.effectiveName + " would like to roleblock " + mentioned!! + " tonight.")
                 Messages.sendDM(message.author, "You will be escorting " + mentioned!!.effectiveName + " tonight.")
-                message.delete()
+                message.delete().complete()
             }
             "mayor" -> {
                 Messages.sendMessage(message.channel, message.member.effectiveName + " has revealed themselves as the Mayor!")
                 //Set the variable for mayor reveal to true
                 MafiaConfig.setExtra(message, true)
                 Messages.sendMessage(game.adminChannel, message.member.effectiveName + " has revealed as the mayor. Their votes now count as 3.")
-                message.delete()
+                message.delete().complete()
             }
 
             "medium" -> {
                 if (!game.day && player.dead) {
                     Messages.sendMessage(game.adminChannel, message.member.effectiveName + " would like to talk to " + mentioned!!.effectiveName)
                     Messages.sendDM(message.author, "Your message has been sent to the Admin. Please wait for them to respond to your secance request")
-                    message.delete()
+                    message.delete().complete()
                 }
             }
             "retributionist" -> {
                 Messages.sendMessage(game.adminChannel, message.author.name + " will be reviving " + mentioned!! + " tonight.")
                 Messages.sendDM(message.author, "You will be reviving " + mentioned!!.effectiveName + " tonight.")
-                message.delete()
+                message.delete().complete()
             }
             "disguiser" -> {
                 Messages.sendMessage(game.adminChannel, message.author.name + " is going to be disguised as " + mentioned!!.effectiveName + " in role.")
                 MafiaConfig.setExtra(message, mentioned.user.idLong)
                 //MafiaListener.addDirtyValue(Triple(mentioned, Details.EXTRA, 0L))
                 Messages.sendDM(message.author, "You will be disguising as " + mentioned!!.effectiveName)
-                message.delete()
+                message.delete().complete()
             }
             "forger" -> {
                 Messages.sendMessage(game.adminChannel, message.author.name + " is gonna forge the role of " + mentioned!!.effectiveName + " to be Forger.")
                 Messages.sendDM(message.author, "You will be forging the role of " + mentioned!!.effectiveName)
-                message.delete()
+                message.delete().complete()
             }
             "framer" -> {
                 Messages.sendMessage(game.adminChannel, message.author.name + " is gonna frame " + mentioned!!.effectiveName)
                 Messages.sendDM(message.author, "You will be framing " + mentioned!!.effectiveName)
-                message.delete()
+                message.delete().complete()
             }
             "janitor" -> {
                 Messages.sendMessage(game.adminChannel, message.author.name + " would like to clean the role of " + Utils.getMentionedUser(message)!!.effectiveName)
                 Messages.sendDM(message.author, "You will be cleaning " + mentioned!!.effectiveName)
-                message.delete()
+                message.delete().complete()
             }
             "blackmailer" -> {
                 Messages.sendMessage(game.adminChannel, message.author.name + "would like to Blackmail " + mentioned!!.effectiveName)
                 Messages.sendDM(message.author, "You will be blackmailing " + mentioned!!.effectiveName)
-                message.delete()
+                message.delete().complete()
             }
             "consigerge" -> {
                 Messages.sendMessage(game.adminChannel, message.author.name + " would like to know the role of " + mentioned!!.effectiveName)
                 Messages.sendDM(message.author, "You will receive the role of " + mentioned!!.effectiveName)
-                message.delete()
+                message.delete().complete()
             }
             "amnesiac" -> {
                 Messages.sendMessage(game.adminChannel, message.author.name + " would like to remember the role of " + mentioned!!.effectiveName)
                 Messages.sendDM(message.author, "You will remember the role of " + mentioned!!.effectiveName)
-                message.delete()
+                message.delete().complete()
             }
             "survivor" -> {
                 Messages.sendMessage(game.adminChannel, message.author.name + " will be putting on a vest tonight.")
                 Messages.sendDM(message.author, "You will be putting on a vest tonight.")
-                message.delete()
+                message.delete().complete()
             }
             "tracker" -> {
                 Messages.sendMessage(game.adminChannel, message.author.name + " will be tracking " + mentioned!!.effectiveName + " tonight.")
                 Messages.sendDM(message.author, "You will be tracking " + mentioned!!.effectiveName)
-                message.delete()
+                message.delete().complete()
             }
             "trapper" -> {
                 Messages.sendMessage(game.adminChannel, message.author.name + " will be placing a trap at " + mentioned!!.effectiveName + "'s house tonight.")
                 Messages.sendDM(message.author, "You will be placing a trap at " + mentioned!!.effectiveName + "'s house.")
-                message.delete()
+                message.delete().complete()
             }
             "court_wizard" -> {
                 Messages.sendMessage(game.adminChannel, message.author.name + " will protect " + mentioned!!.effectiveName + " from Escorts, Consorts, Transporters, and Witches")
                 Messages.sendDM(message.author, "You will be guarding " + mentioned!!.effectiveName)
-                message.delete()
+                message.delete().complete()
             }
 
         }

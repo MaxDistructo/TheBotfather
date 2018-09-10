@@ -1,5 +1,7 @@
 package maxdistructo.discord.bots.botfather.commands
 
+import com.jagrosh.jdautilities.command.Command
+import com.jagrosh.jdautilities.command.CommandEvent
 import maxdistructo.discord.core.jda.Utils
 import maxdistructo.discord.core.jda.command.BaseCommand
 import maxdistructo.discord.core.jda.command.DefaultCommand
@@ -54,21 +56,21 @@ object Base {
         }
     }
 
-    class Clear : DefaultCommand.AdminCommand("clear"){
-        override val isEventCommand: Boolean
-            get() = false
-        override val helpMessage: String
-            get() = "clear - Clears a channel of non-pinned messages"
-        override val requiresMod: Boolean
-            get() = true
+    class Clear : Command(){
+        init{
+            this.name = "clear"
+            this.help = "clear - Clears all but pinned messages in any channel"
+            this.requiredRole = "High Council"
+            this.guildOnly = true
+        }
 
-        override fun init(message: Message, args: List<String>): String {
+        override fun execute(event: CommandEvent?) {
+            val message = event!!.message
             for(i in message.channel.iterableHistory.complete(true)){
                 if(!i.isPinned){
                     i.delete().submit()
                 }
             }
-            return "Clearing Non-Pinned Messages"
         }
     }
 }

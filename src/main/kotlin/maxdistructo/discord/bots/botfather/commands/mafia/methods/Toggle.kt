@@ -72,7 +72,7 @@ object Toggle {
                     val history = game.jailedChannel.history.retrievedHistory
                     for (hist in history) {
                         if (!hist.isPinned) {
-                            message.delete()
+                            message.delete().submit()
                         }
                     }
                     Perms.allowJailedChat(message, message.guild.getMemberById(player))

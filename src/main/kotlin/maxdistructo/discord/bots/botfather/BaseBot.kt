@@ -7,6 +7,7 @@ import com.jagrosh.jdautilities.examples.command.PingCommand
 import maxdistructo.discord.bots.botfather.background.Listener
 import maxdistructo.discord.bots.botfather.commands.Base
 import maxdistructo.discord.bots.botfather.commands.MafiaCommands
+import maxdistructo.discord.bots.botfather.commands.mafia.Relays
 import maxdistructo.discord.bots.botfather.commands.standard.*
 import maxdistructo.discord.core.jda.Config
 import maxdistructo.discord.core.jda.impl.Bot
@@ -26,8 +27,8 @@ object BaseBot{
     @JvmStatic
     fun main(args : Array<String>){
         bot = Bot(Config.readToken())
-        bot.registerListener(maxdistructo.discord.bots.botfather.background.logging.Logger())
-        bot.registerCommands(PingCommand(), MafiaCommands.MafiaBaseCommand(), AboutCommand(Color.BLUE, "MaxDistructo's Bot", arrayOf("Mafia Games", "Horoscope", "Player Fun Commands")))
+        bot.registerListeners(maxdistructo.discord.bots.botfather.background.logging.Logger(), Relays())
+        bot.registerCommands(PingCommand(), MafiaCommands.MafiaBaseCommand(), AboutCommand(Color.BLUE, "MaxDistructo's Bot", arrayOf("Mafia Games", "Horoscope", "Player Fun Commands")), Base.Clear())
         bot.init()
        //bot.commandAPI.listener = Listener()
         client = bot.client
