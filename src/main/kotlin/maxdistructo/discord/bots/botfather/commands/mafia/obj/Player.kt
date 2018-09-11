@@ -12,8 +12,7 @@ class Player : IPlayer {
     private var privPlayerID: Long? = 0
 
     override val role: Enum<Roles>
-        get() = Roles.valueOf(details!![2] as String)
-
+        get() = getEnum(details!![2] as String)
     val allignment: String
         get() = details!![0] as String
 
@@ -56,5 +55,14 @@ class Player : IPlayer {
     constructor(message: Message, player: Member) {
         details = MafiaConfig.getPlayerDetails(message, player.user.idLong)
         privPlayerID = player.user.idLong
+    }
+
+    fun getEnum(s : String) : Enum<Roles>{
+        for(value in Roles.values()){
+            if(value.name == s){
+                return value
+            }
+        }
+        return Roles.SELF
     }
 }

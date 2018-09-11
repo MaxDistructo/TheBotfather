@@ -25,7 +25,7 @@ object MafiaCommands {
             this.name = "mafia"
             this.help = "Mafia Game Commands"
             this.arguments = argBuilder()
-            this.children = arrayOf(Do(), Join(), Continue(), RoleCard(), KillCommand(), JailPlayer(), Vote(), ModInfo(), Start())
+            this.children = arrayOf(Do(), Join(), Continue(), RoleCard(), KillCommand(), JailPlayer(), Vote(), ModInfo(), Start(), Fixer())
         }
         private fun argBuilder() : String{
             val builder = StringBuilder()
@@ -255,16 +255,18 @@ object MafiaCommands {
         }
     }
 
-    class Fixer : MafiaCommand(){
-        override val commandName: String
-            get() = "fix"
-        override val helpMessage: String
-            get() = "mafia fix - Fixes role and channel permissions for all users in the game."
+    class Fixer : Command(){
+        init{
+            this.name = "fix"
+            this.help = "mafia fix - Fixes role and channel permissions for users"
+            this.guildOnly = true
+            this.requiredRole = "Mafia Admin"
+        }
 
-        override fun init(message: Message, args: List<String>): String {
+        override fun execute(event: CommandEvent?) {
+            val message = event!!.message
             Mafia.permFixer(message)
             Messages.sendMessage(message.textChannel, "Fixing permissions and roles for all players")
-            return ""
         }
     }
 

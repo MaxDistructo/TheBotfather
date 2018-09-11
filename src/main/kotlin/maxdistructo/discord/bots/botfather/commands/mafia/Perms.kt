@@ -50,7 +50,10 @@ class Perms(guild : Guild) : IPerms {
                 game.jailorChannel.createPermissionOverride(userByID).setDeny(Permission.MESSAGE_WRITE).submit(true)
             }
             catch(e : IllegalStateException){ //IllegalStateException caused by user already having a permission.
-                game.jailedChannel.getPermissionOverride(userByID).delete().complete()
+                try {
+                    game.jailedChannel.getPermissionOverride(userByID).delete().complete()
+                }
+                catch(e : NullPointerException){}
                 game.jailorChannel.createPermissionOverride(userByID).setDeny(Permission.MESSAGE_WRITE).submit(true)
             }
         }
@@ -62,12 +65,18 @@ class Perms(guild : Guild) : IPerms {
 
         fun denyMafChat(message: Message, user: Member) {
             val game = Game(Utils.readJSONFromFile("/config/mafia/" + message.guild.idLong + "_dat.txt"))
-            game.mafiaChannel.createPermissionOverride(user).setDeny(Permission.MESSAGE_WRITE).submit(true)
+            game.mafiaChannel.createPermissionOverride(user).setAllow(Permission.MESSAGE_READ).setDeny(Permission.MESSAGE_WRITE).submit(true)
         }
 
         fun denyNonMaf(message: Message, user: Member) {
             val game = Game(Utils.readJSONFromFile("/config/mafia/" + message.guild.idLong + "_dat.txt"))
-            game.mafiaChannel.createPermissionOverride(user).setDeny(Permission.MESSAGE_READ, Permission.MESSAGE_WRITE).submit(true)
+            try {
+                game.mafiaChannel.createPermissionOverride(user).setDeny(Permission.MESSAGE_READ, Permission.MESSAGE_WRITE).submit(true)
+            }
+            catch(e : IllegalStateException){
+                game.mafiaChannel.getPermissionOverride(user).delete().complete()
+                //game.mafiaChannel.createPermissionOverride(user).setDeny(Permission.MESSAGE_READ, Permission.MESSAGE_WRITE).complete(true)
+            }
         }
 
         fun allowMediumChat(message: Message, user: Member) {
@@ -97,5 +106,6 @@ class Perms(guild : Guild) : IPerms {
             val game = Game(Utils.readJSONFromFile("/config/mafia/" + message.guild.idLong + "_dat.txt"))
             game.deadChannel.createPermissionOverride(user).setAllow(Permission.MESSAGE_READ, Permission.MESSAGE_WRITE).submit(true)
         }
+        fun allowMaf(message : Message, user: Member){}
     }
 }

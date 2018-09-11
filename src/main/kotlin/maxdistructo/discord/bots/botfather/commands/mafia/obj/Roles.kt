@@ -8,8 +8,8 @@ enum class Roles(name : String) {
     ESCORT("escort"),
     MAYOR("mayor"),
     MEDIUM("medium"),
-    RETRI("retributionist"), //Short for Retributionist
-    TRANS("transporter"), //Short for Transporter
+    RETRIBUTIONIST("retributionist"), //Short for Retributionist
+    TRANSPORTER("transporter"), //Short for Transporter
     BODYGUARD("bodyguard"),
     DOCTOR("doctor"),
     VAMP_HUNTER("vampire_hunter"),
