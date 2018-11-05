@@ -9,3 +9,5 @@ Features:
  - Casino - alpha 2
  
  Bot Version: v1.2b2
+ 
+ To see the latest changes please visit my GitLab as that is my primary development location at this time due to it having a Web IDE. This will end up with the latest stable releases as soon as I get back around to finding the last stable release.
